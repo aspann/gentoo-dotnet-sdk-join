@@ -1,0 +1,51 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.analysis.extraPaths": ["${workspaceFolder}/src/gdsj"],
+    "python.formatting.provider": "none",
+    "editor.formatOnSave": true
+  },
+  "extensions": {
+    "recommendations": [
+      "donjayamanne.python-extension-pack",
+      "DavidAnson.vscode-markdownlint"
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": []
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug",
+        "type": "debugpy",
+        "request": "launch",
+        // "program": "${workspaceFolder}/src/gdsj/main.py",
+        "cwd": "${workspaceFolder}/src",
+        "module": "gdsj.main",
+        "env": {},
+        "console": "integratedTerminal",
+        "justMyCode": true,
+        "args": [
+          "-s",
+          "${workspaceFolder}/tests/test_data/opt/dotnet-sdk-bin-8.0",
+          "-v",
+          "debug",
+          "-lt",
+          "both",
+          "-lo",
+          "${workspaceFolder}/debug.log"
+        ]
+      }
+    ]
+  }
+}
