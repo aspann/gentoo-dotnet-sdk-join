@@ -15,14 +15,14 @@ def main():
 
     # (main) logic start
     log.info(f"Join(src [-s]): '{args.sdk}'")
-    log.info(f"Join(dest[-d]): '{args.dest}'")
+    log.info(f"Join(dest [-d]): '{args.dest}'")
 
     sdk_parser = DevKitParser(log, args)
     sdk_parser.join()
 
+    # almangenate runtimes (within SDK)
     if args.runtime_join:
-        rt_parser = RuntimeParser(sdk_parser)
-        rt_parser.join()
+        RuntimeParser(sdk_parser).join()
 
     # (main) logic end
 

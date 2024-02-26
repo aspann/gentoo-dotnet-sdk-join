@@ -4,7 +4,7 @@ from ..models.dotnet_version import DotnetVersion
 
 
 class SymlinkHelper:
-    def symlink_group(log: Log, version: DotnetVersion, targets: [], segment: str = "sdk"):
+    def symlink_group(log: Log, version: DotnetVersion, targets: list[DotnetVersion], segment: str = "sdk"):
         if len(targets) - 1 <= 0:
             log.error(f"Symlik targets for '{segment}' not set!")
             return

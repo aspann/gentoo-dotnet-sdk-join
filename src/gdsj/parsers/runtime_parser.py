@@ -3,17 +3,17 @@ from ..parsers.dev_kit_parser import DevKitParser
 
 
 class RuntimeParser:
-    def __init__(self, dev_kit: DevKitParser):
-        if not dev_kit or not dev_kit.log:
+    def __init__(self, parser: DevKitParser):
+        if not parser or not parser.log:
             return
-        dev_kit.log.debug("Initializing RT parser...")
-        self.log = dev_kit.log
-        self.args = dev_kit.args
-        self.dev_kit = dev_kit
+        parser.log.debug("Initializing RT parser...")
+        self.log = parser.log
+        self.args = parser.args
+        self.parser = parser
         self.initialized = self.initialize()
 
     def initialize(self) -> bool:
-        if not self.dev_kit:
+        if not self.parser:
             self.log.error("RT not found!")
             return False
 
@@ -24,16 +24,8 @@ class RuntimeParser:
     def join(self):
         self.log.debug("RT parser joining..")
 
-        # kind augly?
-        for sdk in self.dev_kit.sdks:
-            if sdk == self.dev_kit.sdk:
-                continue
-
-            SymlinkHelper.symlink_group(
-                self.log, self.dev_kit.sdk, self.dev_kit.sdks, "shared/Microsoft.AspNetCore.App"
-            )
-            SymlinkHelper.symlink_group(
-                self.log, self.dev_kit.sdk, self.dev_kit.sdks, "shared/Microsoft.NETCore.App"
-            )
+        sdks = [s for s in self.parser.sdks if s != self.parser.sdk]
+        for p in ["shared/Microsoft.AspNetCore.App", "shared/Microsoft.NETCore.App"]:
+            SymlinkHelper.symlink_group(self.log, self.parser.sdk, sdks, p)
 
         self.log.debug("RT parser join-end.")
