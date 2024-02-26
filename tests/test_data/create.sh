@@ -22,14 +22,17 @@ sdks="2.0,3.1,5.0,6.0,7.0,8.0"
 
 ## iterate through SDK's
 for sdk in ${sdks//,/ }; do
+    bpath="${tbdir}/opt/dotnet-sdk-bin"
+    (($(echo "${sdk} < 5.0" | bc -l))) && bpath="${tbdir}/opt/dotnetcore-sdk-bin"
+
     echo "creating test-structure for SDK: ${sdk}.."
 
-    mkdir -p ${tbdir}/opt/dotnet-sdk-bin-${sdk}/sdk/${sdk}.100
-    touch ${tbdir}/opt/dotnet-sdk-bin-${sdk}/sdk/${sdk}.100/.keep
+    mkdir -p ${bpath}-${sdk}/sdk/${sdk}.100
+    touch ${bpath}-${sdk}/sdk/${sdk}.100/.keep
 
-    mkdir -p ${tbdir}/opt/dotnet-sdk-bin-${sdk}/shared/Microsoft.AspNetCore.App/${sdk}.100
-    touch ${tbdir}/opt/dotnet-sdk-bin-${sdk}/shared/Microsoft.AspNetCore.App/${sdk}.100/.keep
+    mkdir -p ${bpath}-${sdk}/shared/Microsoft.AspNetCore.App/${sdk}.100
+    touch ${bpath}-${sdk}/shared/Microsoft.AspNetCore.App/${sdk}.100/.keep
 
-    mkdir -p ${tbdir}/opt/dotnet-sdk-bin-${sdk}/shared/Microsoft.NETCore.App/${sdk}.100
-    touch ${tbdir}/opt/dotnet-sdk-bin-${sdk}/shared/Microsoft.NETCore.App/${sdk}.100/.keep
+    mkdir -p ${bpath}-${sdk}/shared/Microsoft.NETCore.App/${sdk}.100
+    touch ${bpath}-${sdk}/shared/Microsoft.NETCore.App/${sdk}.100/.keep
 done
