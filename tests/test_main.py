@@ -30,7 +30,7 @@ def test_dotnet_version(major: str, full: str, combined: str):
 def test_cliargs():
     args = CliArgs(
         sdk="4.2",
-        dest="/tmp/bla",
+        dest="/tmp/test",
         version=True,
         verbosity="123",
         log_target="abc",
@@ -38,7 +38,7 @@ def test_cliargs():
         runtime_join=True
     )
     assert args.sdk == "4.2"
-    assert args.dest == "/tmp/bla"
+    assert args.dest == "/tmp/test"
     assert args.version is True
     assert args.verbosity == "123"
     assert args.log_target == "abc"
@@ -47,15 +47,15 @@ def test_cliargs():
 
 
 @pytest.mark.parametrize("version_str,expected", [
-    ("FURZ-2.0", "2.0"),
-    ("schniggedings-3.1", "3.1"),
+    ("WORD-2.0", "2.0"),
+    ("AnotherWord-3.1", "3.1"),
     ("5.0", "5.0"),
     ("6.0", "6.0"),
     ("7.0", "7.0"),
     ("8.0", "8.0"),
-    ("asdfasdfwerf-8.0.1", "8.0.1"),
-    ("aasdfasdfasdf8.0", "8.0"),
-    ("LULU", None)
+    ("gmZfqGuTj-8.0.1", "8.0.1"),
+    ("ACAzIoAFA8.0", "8.0"),
+    ("YwsbWQERASYRTUgxSkE", None)
 ])
 def test_version(version_str: str, expected: str | None):
     parsed = VersionHelper.get_version(version_str)
@@ -64,19 +64,28 @@ def test_version(version_str: str, expected: str | None):
 
 
 def test_devkitparser(log_fixture: Log, test_dotnet_dir: str):
+    for i in ["5.0", "6.0", "7.0", "8.0"]:
+        skeleton_sdk_dir = os.path.join(
+            test_dotnet_dir, f"opt/dotnet-sdk-bin/dotnet-sdk-bin-{i}")
+        parser = DevKitParser(log_fixture, skeleton_sdk_dir, None)
+        assert parser.initialized
 
-    skeleton_sdk_dir = os.path.join(
-        test_dotnet_dir, "opt/dotnet-sdk-bin/dotnet-sdk-bin-6.0")
-    parser = DevKitParser(log_fixture, skeleton_sdk_dir, None)
-    assert parser.initialized
+
+def test_runtime_parser(log_fixture: Log, test_dotnet_dir: str):
+    for i in ["5.0", "6.0", "7.0", "8.0"]:
+        skeleton_sdk_dir = os.path.join(
+            test_dotnet_dir, f"opt/dotnet-sdk-bin/dotnet-sdk-bin-{i}")
+        dk_parser = DevKitParser(log_fixture, skeleton_sdk_dir, None)
+        rt_parser = RuntimeParser(dk_parser)
+        assert dk_parser.initialized
+        assert rt_parser.initialized
 
 
-def test_runtime_parser(log_fixture: Log, test_dotnet_dir: str, temp_dir: str):
-    # Directory with correctly named subdir structure
-    skeleton_sdk_dir = os.path.join(
-        test_dotnet_dir, "opt/dotnet-sdk-bin/dotnet-sdk-bin-6.0")
-    print(skeleton_sdk_dir)
-    dk_parser = DevKitParser(log_fixture, skeleton_sdk_dir, None)
-    rt_parser = RuntimeParser(dk_parser)
-    assert dk_parser.initialized
-    assert rt_parser.initialized
+def test_legacy_runtime_parser(log_fixture: Log, test_dotnet_dir: str):
+    for i in ["2.0", "3.1"]:
+        skeleton_sdk_dir = os.path.join(
+            test_dotnet_dir, f"opt/dotnetcore-sdk-bin-{i}")
+        dk_parser = DevKitParser(log_fixture, skeleton_sdk_dir, None)
+        rt_parser = RuntimeParser(dk_parser)
+        assert not dk_parser.initialized
+        assert rt_parser.initialized
