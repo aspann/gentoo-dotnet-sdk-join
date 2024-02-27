@@ -1,4 +1,3 @@
-import argparse
 import os
 
 from pathlib import Path
@@ -6,32 +5,41 @@ from pathlib import Path
 from ..helpers.symlink_helper import SymlinkHelper
 from ..helpers.version_helper import VersionHelper
 from ..log.logger import Log
+from ..models.cli_args import CliArgs
 from ..models.dotnet_version import DotnetVersion
 
 
 class DevKitParser:
-    def __init__(self, log: Log, args: argparse.Namespace):
+    def __init__(self, log: Log, sdk_src_rp: str, sdk_dst: str | None):
         log.debug("Initializing SDK parser...")
         self.log = log
-        # initializing other vars
-        self.args = args
+        self.sdk_dst = sdk_dst
+        self.sdk_src_rp = sdk_src_rp    # SDK src rootpath
         self.sdk = DotnetVersion()
         self.sdks = []
         self.initialized = self.initialize()
 
+    @classmethod
+    def from_args(cls, log: Log, cli_args: CliArgs):
+        return cls(
+            log,
+            cli_args.sdk,
+            cli_args.dest
+        )
+
     def initialize(self) -> bool:
         # find installed dotnet SDKs
-        if not self.args.sdk:
+        if not self.sdk_src_rp:
             self.log.error("Dotnet SDK path not set")
             return False
-        if not self.args.dest:
-            self.args.dest = self.args.sdk
-        elif not os.access(self.args.dest, os.W_OK):
+        if not self.sdk_dst:
+            self.sdk_dst = self.sdk_src_rp
+        elif not os.access(self.sdk_dst, os.W_OK):
             self.log.error(f"Failed to open dotnet SDK diretory: '{
-                           self.args.dest}' (write)")
+                           self.sdk_dst}' (write)")
             return False
 
-        dir, subdir = os.path.split(os.path.abspath(self.args.sdk))
+        dir, subdir = os.path.split(os.path.abspath(self.sdk_src_rp))
         self.sdk.path = f"{dir}/{subdir}"
         self.log.debug(f"Current dotnet SDK location: {self.sdk.path}")
 
@@ -48,7 +56,7 @@ class DevKitParser:
             ])
             self.sdk.full_version = avail_versions[len(avail_versions)-1]
             self.log.debug(f"Current dotnet SDK version: {
-                           self.sdk.get_combined_version()}")
+                           self.sdk.combined_version}")
         except Exception:
             self.log.error(
                 f"Failed to aquire full dotnet SDK version for '{subdir}'")
@@ -74,7 +82,7 @@ class DevKitParser:
             )
 
             self.log.debug(f"Found dotnet SDK: '{sdk.path}' ({
-                           sdk.get_combined_version()}) active: {sdk.active}")
+                           sdk.combined_version}) active: {sdk.active}")
             self.sdks.append(sdk)
         # todo: what if more then one active sdk in the slot? (can that ever happen?)
 

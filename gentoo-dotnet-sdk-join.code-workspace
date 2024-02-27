@@ -29,7 +29,6 @@
         "name": "Debug",
         "type": "debugpy",
         "request": "launch",
-        // "program": "${workspaceFolder}/src/gdsj/main.py",
         "cwd": "${workspaceFolder}/src",
         "module": "gdsj.main",
         "env": {},
@@ -45,6 +44,17 @@
           "-lo",
           "${workspaceFolder}/debug.log"
         ]
+      },
+      {
+        "name": "Debug Test",
+        "type": "debugpy",
+        "request": "launch",
+        "cwd": "${workspaceFolder}",
+        "module": "pytest",
+        "env": {},
+        "console": "integratedTerminal",
+        "justMyCode": true,
+        "args": []
       }
     ]
   }

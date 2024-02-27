@@ -8,7 +8,6 @@ class RuntimeParser:
             return
         parser.log.debug("Initializing RT parser...")
         self.log = parser.log
-        self.args = parser.args
         self.parser = parser
         self.initialized = self.initialize()
 
@@ -24,8 +23,8 @@ class RuntimeParser:
     def join(self):
         self.log.debug("RT parser joining..")
 
-        sdks = [s for s in self.parser.sdks if s != self.parser.sdk]
-        for p in ["shared/Microsoft.AspNetCore.App", "shared/Microsoft.NETCore.App"]:
-            SymlinkHelper.symlink_group(self.log, self.parser.sdk, sdks, p)
+        sdks = [sdk for sdk in self.parser.sdks if sdk != self.parser.sdk]
+        for path in ["shared/Microsoft.AspNetCore.App", "shared/Microsoft.NETCore.App"]:
+            SymlinkHelper.symlink_group(self.log, self.parser.sdk, sdks, path)
 
         self.log.debug("RT parser join-end.")

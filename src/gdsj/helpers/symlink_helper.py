@@ -11,7 +11,7 @@ class SymlinkHelper:
 
         for sdk in [s for s in targets if s.full_version != version.full_version]:
             # iterate through all non-active(current) SDKs
-            log.debug(f"Joining {sdk.get_combined_version()}...")
+            log.debug(f"Joining {sdk.combined_version}...")
             src = f"{sdk.path}/{segment}/{sdk.full_version}"
             dst = f"{version.path}/{segment}/{sdk.full_version}"
             dst_ul = False  # if {dst} must be removed before linking

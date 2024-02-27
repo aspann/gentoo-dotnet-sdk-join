@@ -8,5 +8,6 @@ class DotnetVersion:
     full_version: str | None = None,
     active: bool = False
 
-    def get_combined_version(self) -> str:
+    @property
+    def combined_version(self) -> str:
         return f"{self.major_version}/{self.full_version}"

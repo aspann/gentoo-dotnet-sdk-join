@@ -1,7 +1,8 @@
-import argparse
 import logging
 import os
 import sys
+
+from ..models.cli_args import CliArgs
 from ..enums.stdout_mode import StdoutMode
 from .log_formatter import LogFormatter
 
@@ -10,7 +11,7 @@ class Log:
     """Logging abstraction"""
     level = logging.NOTSET
 
-    def __init__(self, args: argparse.Namespace):
+    def __init__(self, verbosity: str, log_target: str, log_output: str | None):
         """Constructor
 
         Args:
@@ -18,22 +19,22 @@ class Log:
         """
         log_handlers = []
         self.level = logging.NOTSET
-        if isinstance(args.verbosity, str):
-            self.level = logging.getLevelName(args.verbosity.upper())
+        if isinstance(verbosity, str):
+            self.level = logging.getLevelName(verbosity.upper())
 
         # checking stdout(mode)
         stdout = StdoutMode.STDOUT
-        match args.log_target:
+        match log_target:
             case "both":
-                if self.chk_outfile(args.log_output):
+                if self.chk_outfile(log_output):
                     stdout = StdoutMode.BOTH
                     log_handlers.append(
-                        logging.FileHandler(filename=args.log_output))
+                        logging.FileHandler(filename=log_output))
             case "file":
-                if self.chk_outfile(args.log_output):
+                if self.chk_outfile(log_output):
                     stdout = StdoutMode.FILE
                     log_handlers.append(
-                        logging.FileHandler(filename=args.log_output))
+                        logging.FileHandler(filename=log_output))
 
         if self.level > logging.NOTSET:
             if stdout == StdoutMode.STDOUT or stdout == StdoutMode.BOTH or len(log_handlers) == 0:
@@ -49,14 +50,27 @@ class Log:
 
         self.debug("Logger initilaized.")
 
-        """ this hsould be moved to the tests - let it sit here for now
+        """ this should be moved to the tests - let it sit here for now
         self.debug("selftestet (debug)")
         self.info("selftestet (info)")
-        self.warn("selftestet (warn)")
+        self.warning("selftestet (warn)")
         self.error("selftestet (error)")
         self.crit("selftestet (crit)")
         self.raw("")
         """
+
+    @classmethod
+    def from_args(cls, args: CliArgs):
+        """Alternative constructor
+
+        Args:
+            args (argparse.Namespace): arguments (provided to main caller)
+        """
+        return cls(
+            args.verbosity,
+            args.log_target,
+            args.log_output
+        )
 
     def chk_outfile(self, filename: str) -> bool:
         dir, filename = os.path.split(os.path.abspath(filename))
@@ -85,8 +99,11 @@ class Log:
             logging.info(msg)
 
     def warn(self, msg: str):
+        self.warning(msg)
+
+    def warning(self, msg: str):
         if self.level > logging.NOTSET:
-            logging.warn(msg)
+            logging.warning(msg)
 
     def raw(self, msg: str):
         if self.level > logging.NOTSET:
