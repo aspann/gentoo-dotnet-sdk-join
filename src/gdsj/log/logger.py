@@ -76,10 +76,8 @@ class Log:
         dir, filename = os.path.split(os.path.abspath(filename))
         if os.access(dir, os.W_OK) and filename:
             return True
-        elif not filename:
-            self.error("No file provided!")
-        else:  # not found - or not writable
-            self.error("Path not writable or inexistent!")
+
+        self.error("Path not writable or inexistent!")
         return False
 
     def crit(self, msg: str):

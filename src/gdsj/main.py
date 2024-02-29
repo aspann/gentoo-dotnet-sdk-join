@@ -7,7 +7,7 @@ from .parsers.dev_kit_parser import DevKitParser
 
 def main():
     args = CliArgsParser().parse()  # init and parsing (CLI-)args
-    log = Log.from_args(args)                 # init logging (needs above)
+    log = Log.from_args(args)       # init logging (requires args)
 
     if args.version:
         log.raw(f"v{__version__}")
