@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 import pytest
 
@@ -9,6 +10,7 @@ from gdsj.log.logger import Log
 def temp_dir():
     dirpath = tempfile.mkdtemp()
     yield dirpath
+    shutil.rmtree(dirpath)
 
 
 @pytest.fixture()
@@ -21,7 +23,7 @@ def test_dotnet_dir(temp_dir: str):
     target_dir = temp_dir
 
     # Define the SDK versions to be processed
-    sdkVers = ["2.0", "3.1", "5.0", "6.0", "7.0", "8.0"]
+    sdkVers = ["2.0", "3.1", "5.0", "6.0", "7.0", "8.0", "9.0"]
 
     # Iterate through the SDK versions, creating the necessary directories and files for each
     for version in sdkVers:

@@ -10,7 +10,7 @@ from ..models.dotnet_version import DotnetVersion
 
 
 class DevKitParser:
-    def __init__(self, log: Log, sdk_src_rp: str, sdk_dst: str | None):
+    def __init__(self, log: Log, sdk_src_rp: str | None, sdk_dst: str | None):
         log.debug("Initializing SDK parser...")
         self.log = log
         self.sdk_dst = sdk_dst
@@ -35,8 +35,9 @@ class DevKitParser:
         if not self.sdk_dst:
             self.sdk_dst = self.sdk_src_rp
         elif not os.access(self.sdk_dst, os.W_OK):
-            self.log.error(f"Failed to open dotnet SDK diretory: '{
-                           self.sdk_dst}' (write)")
+            self.log.error(
+                f"Failed to open dotnet SDK diretory: '{self.sdk_dst}' (write)"
+            )
             return False
 
         dir, subdir = os.path.split(os.path.abspath(self.sdk_src_rp))
@@ -64,27 +65,30 @@ class DevKitParser:
 
         # get current subversion (including legacy versions)
         for sdk_path in sorted(list(Path(dir).glob(subdir.replace("dotnet", "dotnet*").replace(self.sdk.major_version, "*")))):
-            if len(sdk_path.parts) <= 0:
-                continue
-            sdk_path_version = VersionHelper.get_version(
-                sdk_path.parts[len(sdk_path.parts) - 1])
-            sdk_path_versions = sorted([
-                s for s in next(os.walk(f"{sdk_path}/sdk", followlinks=False))[1] if s.startswith(sdk_path_version)
-            ])
-            if len(sdk_path_versions) <= 0:
-                continue
-            sdk = DotnetVersion(
-                path=sdk_path,
-                major_version=sdk_path_version,
-                full_version=sdk_path_versions[len(sdk_path_versions)-1],
-                active=sdk_path_versions[len(
-                    sdk_path_versions)-1] == self.sdk.full_version
-            )
+            try:
+                sdk_path_version = VersionHelper.get_version(
+                    sdk_path.parts[len(sdk_path.parts) - 1]
+                )
+                sdk_path_versions = sorted([
+                    s for s in next(os.walk(f"{sdk_path}/sdk", followlinks=False))[1] if s.startswith(sdk_path_version) and s != sdk_path_version
+                ])
+                sdk = DotnetVersion(
+                    path=sdk_path,
+                    major_version=sdk_path_version,
+                    full_version=sdk_path_versions[len(sdk_path_versions)-1],
+                    active=sdk_path_versions[len(sdk_path_versions)-1] == self.sdk.full_version  # noqa
+                )
 
-            self.log.debug(f"Found dotnet SDK: '{sdk.path}' ({
-                           sdk.combined_version}) active: {sdk.active}")
-            self.sdks.append(sdk)
-        # todo: what if more then one active sdk in the slot? (can that ever happen?)
+                self.log.debug(
+                    f"Found dotnet SDK: '{sdk.path}' ({sdk.combined_version}) active: {sdk.active}"  # noqa
+                )
+                self.sdks.append(sdk)
+                # todo: what if more then one active sdk in the slot? (can that ever happen?)
+            except Exception:
+                self.log.error(
+                    f"Failed to aquire full dotnet SDK version for '{subdir}'"
+                )
+                return False
 
         # all set
         return True

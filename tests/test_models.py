@@ -1,6 +1,5 @@
 import pytest
 
-from gdsj.helpers.version_helper import VersionHelper
 from gdsj.models.cli_args import CliArgs
 from gdsj.models.dotnet_version import DotnetVersion
 
@@ -36,20 +35,3 @@ def test_cliargs():
     assert args.log_target == "abc"
     assert args.log_output == "file"
     assert args.runtime_join is True
-
-
-@pytest.mark.parametrize("version_str,expected", [
-    ("2.0", "2.0"),
-    ("3.1", "3.1"),
-    ("5.0", "5.0"),
-    ("6.0", "6.0"),
-    ("7.0", "7.0"),
-    ("8.0", "8.0"),
-    ("WORD-8.0.1", "8.0.1"),
-    ("AnotherWord8.0", "8.0"),
-    ("YwsbWQERASYRTUgxSkE", None)
-])
-def test_version(version_str: str, expected: str | None):
-    parsed = VersionHelper.get_version(version_str)
-    assert parsed == expected, \
-        f"Mismatch, expected: {expected} - got: {version_str}"

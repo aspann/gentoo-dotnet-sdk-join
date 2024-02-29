@@ -23,7 +23,6 @@ class SymlinkHelper:
             elif dst_path.is_symlink() and not dst_path.exists():
                 log.warn(f"{dst} seems to be a broken symlink.")
                 dst_ul = True  # force deletion of "{dst}"
-                break
             elif dst_path.is_symlink():
                 log.warn(f"{dst} already linked, skipping.")
                 continue

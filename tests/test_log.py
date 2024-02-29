@@ -59,14 +59,14 @@ def test_logger_method_exists(log_fixture: Log, method: str):
     assert method("test_message") is None
 
 
-def test_logger_chk_outfile_exists(temp_dir: str):
-    log = Log("critical", "both", f"{temp_dir}/test.log")
-    assert log.chk_outfile(f"{temp_dir}/test.log")
+@pytest.mark.parametrize("target", ["test.log"])
+def test_logger_chk_outfile_exists(log_fixture: Log, temp_dir: str, target: str):
+    assert log_fixture.chk_outfile(f"{temp_dir}/{target}")
 
 
-def test_logger_chk_outfile_invalid(temp_dir: str):
-    log = Log("critical", "both", f"{temp_dir}/inexistent/test.log")
-    assert not log.chk_outfile(f"{temp_dir}/inexistent/test.log")
+@pytest.mark.parametrize("target", ["inexistent/test.log"])
+def test_logger_chk_outfile_invalid(log_fixture: Log, temp_dir: str, target: str):
+    assert not log_fixture.chk_outfile(f"{temp_dir}/{target}")
 
 
 @pytest.mark.parametrize("verbosity, level", [
