@@ -48,7 +48,8 @@ class DevKitParser:
         self.sdk.major_version = VersionHelper.get_version(subdir)
         if not self.sdk.major_version:
             self.log.error(
-                f"Failed to aquire dotnet SDK version for '{subdir}'")
+                f"Failed to aquire dotnet SDK version for '{subdir}'"
+            )
             return False
 
         try:
@@ -56,11 +57,13 @@ class DevKitParser:
                 s for s in next(os.walk(f"{self.sdk.path}/sdk", followlinks=False))[1] if s.startswith(self.sdk.major_version)
             ])
             self.sdk.full_version = avail_versions[len(avail_versions)-1]
-            self.log.debug(f"Current dotnet SDK version: {
-                           self.sdk.combined_version}")
+            self.log.debug(
+                f"Current dotnet SDK version: {self.sdk.combined_version}"
+            )
         except Exception:
             self.log.error(
-                f"Failed to aquire full dotnet SDK version for '{subdir}'")
+                f"Failed to aquire full dotnet SDK version for '{subdir}'"
+            )
             return False
 
         # get current subversion (including legacy versions)
