@@ -51,7 +51,6 @@ def test_log_formatter(level: int, entry: str):
 def test_logger_verbosity_parsing(verbosity: str, level: int):
     log = Log(verbosity, "", None)
     assert log.level == level
-    log.shutdown()
 
 
 @pytest.mark.parametrize("method", [
@@ -94,4 +93,14 @@ def test_logger_from_args(temp_dir: str, verbosity: str, level: int):
     )
     log = Log.from_args(args)
     assert log.level == level
-    log.shutdown()
+
+
+def test_logger_shutdown(log_fixture: Log):
+    assert log_fixture.shutdown() is None
+    assert len(log_fixture.handlers) == 0
+
+
+def test_logger_exit(log_fixture: Log):
+    # this internally also calls "shutdown()"
+    assert log_fixture.__exit__(None, None, None) is None
+    assert len(log_fixture.handlers) == 0

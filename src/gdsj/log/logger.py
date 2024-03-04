@@ -113,3 +113,7 @@ class Log:
         for handler in self.handlers:
             handler.close()
         logging.shutdown()
+        self.handlers = []  # empty handlers
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.shutdown()

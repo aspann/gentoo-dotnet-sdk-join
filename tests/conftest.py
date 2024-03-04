@@ -16,9 +16,7 @@ def temp_dir():
 
 @pytest.fixture()
 def log_fixture():
-    log = Log("debug", "file", "/tmp/gdsj.log")
-    yield log
-    log.shutdown()
+    return Log("debug", "file", "/tmp/gdsj.log")
 
 
 @pytest.fixture()
@@ -41,12 +39,12 @@ def test_dotnet_dir(temp_dir: str):
             os.path.join(
                 base_path,
                 f"{dotnet_slug(version)}-{version}",
-                f"shared/Microsoft.AspNetCore.App/{version}.100"
+                f"shared/Microsoft.AspNetCore.App/{version}.23"
             ),
             os.path.join(
                 base_path,
                 f"{dotnet_slug(version)}-{version}",
-                f"shared/Microsoft.NETCore.App/{version}.100"
+                f"shared/Microsoft.NETCore.App/{version}.23"
             ),
             # other needed paths
             os.path.join(base_path, "sdk/9999.99/")

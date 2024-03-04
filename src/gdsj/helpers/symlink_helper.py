@@ -42,12 +42,9 @@ class SymlinkHelper:
                 log.warn(f"{dst} already linked, skipping.")
                 continue
 
-            try:
-                # cleanup
-                if dst_ul:
-                    dst_path.unlink()
-                # linking
-                dst_path.symlink_to(Path(src))
-                log.debug(f"linked {src} to {dst}")
-            except Exception:
-                log.error(f"could not link '{src}' to '{dst}'")
+            # cleanup
+            if dst_ul:
+                dst_path.unlink()
+            # linking
+            dst_path.symlink_to(Path(src))
+            log.debug(f"linked {src} to {dst}")

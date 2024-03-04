@@ -43,8 +43,8 @@ Development thingies.. :)
 ### stash: do not use any of those! (be warned)
 
 ```bash
-# equivalent to(ebuild): distutils_enable_tests pytest
-pytest -vv -ra -l -Wdefault --color=yes
+# equivalent to(ebuild) with coverage: distutils_enable_tests pytest
+pytest -vv -ra -l -Wdefault --color=yes --cov --cov-report term-missing
 ```
 
 ```bash
