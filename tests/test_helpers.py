@@ -7,6 +7,7 @@ from gdsj.helpers.symlink_helper import SymlinkHelper
 from gdsj.helpers.version_helper import VersionHelper
 from gdsj.log.logger import Log
 from gdsj.models.dotnet_version import DotnetVersion
+from utils import dotnet_slug
 
 
 @pytest.mark.parametrize("version_str,expected", [
@@ -31,7 +32,7 @@ def test_version(version_str: str, expected: str | None):
     "2.0", "3.1", "5.0", "6.0", "7.0", "8.0", "9.0"
 ])
 def test_symlink_group(log_fixture: Log, test_dotnet_dir: str, version_str: str):
-    dir = f"dotnet{"" if float(version_str) >= 5 else "core"}-sdk-bin"
+    dir = dotnet_slug(version_str)
     assert SymlinkHelper.symlink_group(
         log_fixture,
         DotnetVersion(
@@ -62,7 +63,7 @@ def test_symlink_against_empty(log_fixture: Log, version_str: str):
     "2.0", "3.1", "5.0", "6.0", "7.0", "8.0", "9.0"
 ])
 def test_symlink_against_dir(log_fixture: Log, test_dotnet_dir: str, version_str: str):
-    dir = f"dotnet{"" if float(version_str) >= 5 else "core"}-sdk-bin"
+    dir = dotnet_slug(version_str)
     # create directory (this is the link destination - which should fail)
     os.makedirs(f"{test_dotnet_dir}/opt/sdk/9999.99/sdk/{version_str}")
 
@@ -95,7 +96,7 @@ def test_symlink_against_symlink(log_fixture: Log, test_dotnet_dir: str, version
         os.path.join(test_dotnet_dir, "/dev/null")
     ))
 
-    dir = f"dotnet{"" if float(version_str) >= 5 else "core"}-sdk-bin"
+    dir = dotnet_slug(version_str)
 
     assert SymlinkHelper.symlink_group(
         log_fixture,
@@ -125,7 +126,7 @@ def test_symlink_against_invalid(log_fixture: Log, test_dotnet_dir: str, version
         os.path.join(test_dotnet_dir, "THISshouldNeverExist_123__")
     ))
 
-    dir = f"dotnet{"" if float(version_str) >= 5 else "core"}-sdk-bin"
+    dir = dotnet_slug(version_str)
 
     assert SymlinkHelper.symlink_group(
         log_fixture,

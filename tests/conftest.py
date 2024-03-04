@@ -4,6 +4,7 @@ import tempfile
 import pytest
 
 from gdsj.log.logger import Log
+from utils import dotnet_slug
 
 
 @pytest.fixture()
@@ -28,20 +29,22 @@ def test_dotnet_dir(temp_dir: str):
     # Iterate through the SDK versions, creating the necessary directories and files for each
     for version in sdkVers:
         base_path = os.path.join(target_dir, 'opt')
-        dir = f"dotnet{"" if float(version) >= 5 else "core"}-sdk-bin"
         # Create directories and touch files
         for dir_path in [
             os.path.join(
                 base_path,
-                f"{dir}-{version}", f"sdk/{version}.100"
+                f"{dotnet_slug(version)}-{version}",
+                f"sdk/{version}.100"
             ),
             os.path.join(
                 base_path,
-                f"{dir}-{version}", f"shared/Microsoft.AspNetCore.App/{version}.100"
+                f"{dotnet_slug(version)}-{version}",
+                f"shared/Microsoft.AspNetCore.App/{version}.100"
             ),
             os.path.join(
                 base_path,
-                f"{dir}-{version}", f"shared/Microsoft.NETCore.App/{version}.100"
+                f"{dotnet_slug(version)}-{version}",
+                f"shared/Microsoft.NETCore.App/{version}.100"
             ),
             # other needed paths
             os.path.join(base_path, "sdk/9999.99/")
