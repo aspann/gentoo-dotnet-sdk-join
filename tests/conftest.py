@@ -16,7 +16,9 @@ def temp_dir():
 
 @pytest.fixture()
 def log_fixture():
-    return Log("debug", "file", "/tmp/gdsj.log")
+    log = Log("debug", "file", "/tmp/gdsj.log")
+    yield log
+    log.shutdown()
 
 
 @pytest.fixture()

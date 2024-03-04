@@ -106,3 +106,6 @@ class Log:
     def raw(self, msg: str):
         if self.level > logging.NOTSET:
             logging.log(self.level + 1, msg)  # '+ 1' to hide the timestamp
+
+    def shutdown(self):
+        logging.shutdown()
