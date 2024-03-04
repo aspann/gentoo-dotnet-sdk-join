@@ -43,6 +43,11 @@ Development thingies.. :)
 ### stash: do not use any of those! (be warned)
 
 ```bash
+# equivalent to(ebuild): distutils_enable_tests pytest
+pytest -vv -ra -l -Wdefault --color=yes
+```
+
+```bash
 flit build
 pip install -e . --break-system-packages
 ${HOME}/.local/bin/gentoo-dotnet-sdk-join

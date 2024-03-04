@@ -10,6 +10,7 @@ from .log_formatter import LogFormatter
 class Log:
     """Logging abstraction"""
     level = logging.NOTSET
+    handlers = []
 
     def __init__(self, verbosity: str, log_target: str, log_output: str | None):
         """Constructor
@@ -17,7 +18,6 @@ class Log:
         Args:
             args (argparse.Namespace): arguments (provided to main caller)
         """
-        log_handlers = []
         self.level = logging.NOTSET
         if isinstance(verbosity, str):
             self.level = logging.getLevelName(verbosity.upper())
@@ -28,24 +28,26 @@ class Log:
             case "both":
                 if self.chk_outfile(log_output):
                     stdout = StdoutMode.BOTH
-                    log_handlers.append(
-                        logging.FileHandler(filename=log_output))
+                    self.handlers.append(
+                        logging.FileHandler(filename=log_output)
+                    )
             case "file":
                 if self.chk_outfile(log_output):
                     stdout = StdoutMode.FILE
-                    log_handlers.append(
-                        logging.FileHandler(filename=log_output))
+                    self.handlers.append(
+                        logging.FileHandler(filename=log_output)
+                    )
 
         if self.level > logging.NOTSET:
-            if stdout == StdoutMode.STDOUT or stdout == StdoutMode.BOTH or len(log_handlers) == 0:
+            if stdout == StdoutMode.STDOUT or stdout == StdoutMode.BOTH or len(self.handlers) == 0:
                 sh = logging.StreamHandler(stream=sys.stdout)
                 sh.setFormatter(LogFormatter())
-                log_handlers.append(sh)
+                self.handlers.append(sh)
 
             logging.basicConfig(
                 level=self.level,
                 format='%(asctime)s %(levelname)s %(message)s',
-                handlers=log_handlers
+                handlers=self.handlers
             )
 
         self.debug("Logger initilaized.")
@@ -108,4 +110,6 @@ class Log:
             logging.log(self.level + 1, msg)  # '+ 1' to hide the timestamp
 
     def shutdown(self):
+        for handler in self.handlers:
+            handler.close()
         logging.shutdown()

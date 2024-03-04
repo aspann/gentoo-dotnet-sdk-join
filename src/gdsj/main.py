@@ -25,6 +25,7 @@ def main():
         RuntimeParser(sdk_parser).join()
 
     # (main) logic end
+    log.shutdown()
 
 
 if __name__ == "__main__":
