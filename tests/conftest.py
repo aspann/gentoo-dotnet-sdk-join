@@ -50,6 +50,4 @@ def test_dotnet_dir(temp_dir: str):
             os.path.join(base_path, "sdk/9999.99/")
         ]:
             os.makedirs(dir_path, exist_ok=True)
-            # Create file to keep dir (Actually obsolete)
-            open(os.path.join(dir_path, '.keep'), 'w')
     return target_dir
