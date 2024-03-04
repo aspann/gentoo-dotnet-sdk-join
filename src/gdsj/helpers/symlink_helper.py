@@ -1,6 +1,7 @@
 from pathlib import Path
 from ..log.logger import Log
 from ..models.dotnet_version import DotnetVersion
+from ..helpers.version_helper import VersionHelper
 
 
 class SymlinkHelper:
@@ -9,11 +10,25 @@ class SymlinkHelper:
             log.error(f"Symlik targets for '{segment}' not set!")
             return
 
-        for sdk in [s for s in targets if s.full_version != version.full_version]:
+        for sdk in [s for s in targets if float(s.major_version) < float(version.major_version)]:
             # iterate through all non-active(current) SDKs
             log.debug(f"Joining {sdk.combined_version}...")
             src = f"{sdk.path}/{segment}/{sdk.full_version}"
             dst = f"{version.path}/{segment}/{sdk.full_version}"
+
+            # if segment isn't sdk we're surely linking RT
+            if segment != "sdk":
+                inst_ver = VersionHelper.get_installed_version(
+                    f"{sdk.path}/{segment}",
+                    sdk.major_version
+                )
+                if inst_ver:
+                    src = f"{sdk.path}/{segment}/{inst_ver}"
+                    dst = f"{version.path}/{segment}/{inst_ver}"
+                else:
+                    log.warn("could not find any installed version, skipping.")
+                    continue
+
             dst_ul = False  # if {dst} must be removed before linking
             dst_path = Path(dst)
 

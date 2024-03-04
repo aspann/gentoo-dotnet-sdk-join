@@ -37,8 +37,8 @@ def test_symlink_group(log_fixture: Log, test_dotnet_dir: str, version_str: str)
         log_fixture,
         DotnetVersion(
             path=f"{test_dotnet_dir}/{dir}-{version_str}/sdk/{version_str}.100",
-            major_version=f"{version_str}.100",
-            full_version=version_str
+            major_version=version_str,
+            full_version=f"{version_str}.100",
         ),
         [DotnetVersion(
             path=f"{test_dotnet_dir}/opt/sdk/9999.99",
@@ -54,7 +54,7 @@ def test_symlink_group(log_fixture: Log, test_dotnet_dir: str, version_str: str)
 def test_symlink_against_empty(log_fixture: Log, version_str: str):
     assert SymlinkHelper.symlink_group(
         log_fixture,
-        DotnetVersion(full_version=version_str),
+        DotnetVersion(major_version=version_str),
         []
     ) is None
 
@@ -76,8 +76,8 @@ def test_symlink_against_dir(log_fixture: Log, test_dotnet_dir: str, version_str
         ),
         [DotnetVersion(
             path=f"{test_dotnet_dir}/{dir}-{version_str}/sdk/{version_str}.100",
-            major_version=f"{version_str}.100",
-            full_version=version_str
+            major_version=version_str,
+            full_version=f"{version_str}.100"
         )]
     ) is None
 
@@ -106,8 +106,8 @@ def test_symlink_against_symlink(log_fixture: Log, test_dotnet_dir: str, version
             full_version="9999.99"
         ), [DotnetVersion(
             path=f"{test_dotnet_dir}/{dir}-{version_str}/sdk/{version_str}.100",
-            major_version=f"{version_str}.100",
-            full_version=version_str
+            major_version=version_str,
+            full_version=f"{version_str}.100"
         )]
     ) is None
 
@@ -136,7 +136,7 @@ def test_symlink_against_invalid(log_fixture: Log, test_dotnet_dir: str, version
             full_version="9999.99"
         ), [DotnetVersion(
             path=f"{test_dotnet_dir}/{dir}-{version_str}/sdk/{version_str}.100",
-            major_version=f"{version_str}.100",
-            full_version=version_str
+            major_version=version_str,
+            full_version=f"{version_str}.100"
         )]
     ) is None
