@@ -12,7 +12,11 @@ class SymlinkHelper:
 
         for sdk in [s for s in targets if float(s.major_version) < float(version.major_version)]:
             # iterate through all non-active(current) SDKs
-            log.info(f"Joining {sdk.combined_version} ({segment.replace("shared/", "")})...")  # noqa
+            log.info(
+                "Joining {} ({})...".format(
+                    sdk.combined_version, segment.replace("shared/", "")
+                )
+            )
             src = f"{sdk.path}/{segment}/{sdk.full_version}"
             dst = f"{version.path}/{segment}/{sdk.full_version}"
 
