@@ -37,9 +37,9 @@ class CliArgsParser:
         )
         self.parser.add_argument(
             "-v", "--verbosity",
-            help="loglevel, default: warning",
+            help="loglevel, default: info",
             choices=["debug", "info", "warning", "error", "critical", ],
-            default="warning"
+            default="info"
         )
         self.parser.add_argument(
             "-lt", "--log-target",
