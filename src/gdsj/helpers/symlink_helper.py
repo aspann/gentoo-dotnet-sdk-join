@@ -13,7 +13,7 @@ class SymlinkHelper:
         for sdk in [s for s in targets if float(s.major_version) < float(version.major_version)]:
             # iterate through all non-active(current) SDKs
             log.info(
-                "Joining {} ({})...".format(
+                "Linking {} ({}) ..".format(
                     sdk.combined_version, segment.replace("shared/", "")
                 )
             )
