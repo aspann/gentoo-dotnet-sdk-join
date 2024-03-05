@@ -22,7 +22,7 @@ class RuntimeParser:
         return True
 
     def join(self):
-        self.log.info("Joining runtimes..")
+        self.log.debug("Joining runtimes..")
 
         sdks = [sdk for sdk in self.parser.sdks if sdk != self.parser.sdk]
         for path in ["shared/Microsoft.AspNetCore.App", "shared/Microsoft.NETCore.App"]:

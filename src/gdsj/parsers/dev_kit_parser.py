@@ -97,7 +97,7 @@ class DevKitParser:
         return True
 
     def join(self):
-        self.log.info("Joining SDKs..")
+        self.log.debug("Joining SDKs..")
         if not self.initialized:
             self.log.error("Failed to find any usable dotnet SDK")
             return

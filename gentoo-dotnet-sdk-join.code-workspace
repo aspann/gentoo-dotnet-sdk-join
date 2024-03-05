@@ -29,7 +29,7 @@
         "name": "Debug",
         "type": "debugpy",
         "request": "launch",
-        "cwd": "${workspaceFolder}/src",
+        "cwd": "${workspaceFolder}",
         "module": "gdsj.main",
         "env": {},
         "console": "integratedTerminal",
