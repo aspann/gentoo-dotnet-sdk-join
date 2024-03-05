@@ -14,8 +14,8 @@ def main():
         return
 
     # (main) logic start
-    log.info(f"Join(src [-s]): '{args.sdk}'")
-    log.info(f"Join(dest [-d]): '{args.dest}'")
+    log.debug(f"Join(src [-s]): '{args.sdk}'")
+    log.debug(f"Join(dest [-d]): '{args.dest}'")
 
     sdk_parser = DevKitParser.from_args(log, args)
     sdk_parser.join()
@@ -25,6 +25,7 @@ def main():
         RuntimeParser(sdk_parser).join()
 
     # (main) logic end
+    log.debug("application is shutting down..")
     log.shutdown()
 
 

@@ -11,7 +11,7 @@ from ..models.dotnet_version import DotnetVersion
 
 class DevKitParser:
     def __init__(self, log: Log, sdk_src_rp: str | None, sdk_dst: str | None):
-        log.debug("Initializing SDK parser...")
+        log.debug("Initializing SDK-Parser...")
         self.log = log
         self.sdk_dst = sdk_dst
         self.sdk_src_rp = sdk_src_rp    # SDK src rootpath
@@ -97,11 +97,11 @@ class DevKitParser:
         return True
 
     def join(self):
-        self.log.debug("Joining SDKs (join_sdk)..")
+        self.log.info("Joining SDKs..")
         if not self.initialized:
             self.log.error("Failed to find any usable dotnet SDK")
             return
 
         SymlinkHelper.symlink_group(self.log, self.sdk, self.sdks)
 
-        self.log.debug("SDK parser join-end.")
+        self.log.debug("SDK-Parser done.")
