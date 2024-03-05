@@ -43,6 +43,11 @@ Development thingies.. :)
 ### stash: do not use any of those! (be warned)
 
 ```bash
+# gen docs (html)
+doxygen
+```
+
+```bash
 # equivalent to(ebuild) with coverage: distutils_enable_tests pytest
 pytest -vv -ra -l -Wdefault --color=yes --cov --cov-report term-missing
 ```

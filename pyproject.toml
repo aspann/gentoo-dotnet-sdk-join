@@ -20,6 +20,10 @@ test = ["pytest >=7.0.0", "pytest-cov"]
 [tool.flit.module]
 name = "gdsj"
 
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+addopts = "-vv -ra -l -Wdefault --color=yes --cov --cov-report term-missing --junitxml=docs/report.xml"
+
 [project.scripts]
 gentoo-dotnet-sdk-join = "gdsj.main:main"
 
