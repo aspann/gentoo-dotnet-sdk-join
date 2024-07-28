@@ -1,0 +1,35 @@
+[project]
+name = "gentoo-dotnet-sdk-join"
+authors = [{ name = "Armas Spann", email = "zappel@simple-co.de" }]
+readme = "README.md"
+license = { file = "LICENSE" }
+dynamic = ["version", "description"]
+requires-python = ">=3.11"
+dependencies = []
+classifiers = [
+    "Environment :: Console",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3 :: Only",
+]
+
+[project.optional-dependencies]
+test = ["pytest >=7.0.0", "pytest-cov"]
+
+[tool.flit.module]
+name = "gdsj"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+addopts = "-vv -ra -l -Wdefault --color=yes --cov --cov-report term-missing --junitxml=docs/report.xml"
+
+[project.scripts]
+gentoo-dotnet-sdk-join = "gdsj.main:main"
+
+[project.urls]
+Home = "https://github.com/aspann/gentoo-dotnet-sdk-join"
+
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"

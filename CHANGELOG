@@ -1,0 +1,24 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [unreleased]
+
+## [0.0.1]
+
+Initial relase of this small helper-tool. Basefunctionality is guaranteed, but still in a testing-state. If any issue occure, please open an issue using: <https://github.com/aspann/gentoo-dotnet-sdk-join/issues/new>
+
+More details can be found inside [README](README.md)
+
+### Added
+
+- SDK-Parser
+- Runtime-Parser
+- Unit-Tests
+- Gentoo-Ebuild
+
+[unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.1...HEAD
+[0.0.1]: https://github.com/aspann/gentoo-dotnet-sdk-join/releases/tag/v0.0.1

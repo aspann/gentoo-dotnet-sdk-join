@@ -1,0 +1,74 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.analysis.extraPaths": ["${workspaceFolder}/src/gdsj"],
+    "python.formatting.provider": "none",
+    "editor.formatOnSave": true
+  },
+  "extensions": {
+    "recommendations": [
+      "donjayamanne.python-extension-pack",
+      "DavidAnson.vscode-markdownlint"
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "build-doxygen",
+        "type": "shell",
+        "linux": { "command": "doxygen" }
+      }
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug",
+        "type": "debugpy",
+        "request": "launch",
+        "cwd": "${workspaceFolder}",
+        "module": "gdsj.main",
+        "env": {},
+        "console": "integratedTerminal",
+        "justMyCode": true,
+        "args": [
+          "-s",
+          "${workspaceFolder}/tests/test_data/opt/dotnet-sdk-bin-8.0",
+          "-v",
+          "debug",
+          "-lt",
+          "both",
+          "-lo",
+          "${workspaceFolder}/debug.log"
+        ]
+      },
+      {
+        "name": "Debug Test",
+        "type": "debugpy",
+        "request": "launch",
+        "cwd": "${workspaceFolder}",
+        "module": "pytest",
+        "env": {},
+        "console": "integratedTerminal",
+        "justMyCode": true,
+        "args": []
+      },
+      {
+        "name": "Doxygen [interactive/html]",
+        "type": "chrome",
+        "request": "launch",
+        "file": "${workspaceFolder}/docs/html/index.html",
+        "preLaunchTask": "bukd-doxygen"
+      }
+    ]
+  }
+}
